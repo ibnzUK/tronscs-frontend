@@ -74,7 +74,6 @@
 <script>
 import { FormatNumber } from "@/utils/FormatNumber";
 import { formatInput } from "@/utils/Tron";
-
 export default {
   data() {
     return {
@@ -120,7 +119,6 @@ export default {
             item.name.indexOf(value) > -1 ||
             item.id.indexOf(value) > -1
         );
-
         return (
           value == "" ||
           item.name.indexOf(value) > -1 ||
@@ -200,7 +198,6 @@ export default {
           type: "info",
           content: "Waiting user sign \n"
         });
-
         const signed = await window.tronWeb.trx.sign(unsigned);
         this.updateDeployStatus({
           type: "info",
@@ -208,7 +205,6 @@ export default {
             signed
           )}'/>\nBroadcast transaction\n`
         });
-
         const broadcastResult = await window.tronWeb.trx.sendRawTransaction(
           signed
         );
@@ -219,7 +215,6 @@ export default {
               broadcastResult
             )}'/> \nWaiting for confirm from Tron blockchain\n`
           });
-
           let transactionInfo = {};
           do {
             transactionInfo = await window.tronWeb.trx.getTransactionInfo(
@@ -232,13 +227,13 @@ export default {
                   content: `Successful deployed contract '${
                     this.currentContractDeployName
                   }'. Cost: ${
-                    transactionInfo.receipt.energy_fee
+                transactionInfo.receipt.energy_fee != undefined
                       ? FormatNumber(
                           transactionInfo.receipt.energy_fee / 1000000
                         )
                       : 0
                   } TRX, ${
-                    transactionInfo.receipt.energy_usage
+                  transactionInfo.receipt.energy_fee != undefined
                       ? FormatNumber(transactionInfo.receipt.energy_usage)
                       : 0
                   } energy. Transaction confirm here <tx id='${
@@ -248,12 +243,10 @@ export default {
                 let base58Adress = window.tronWeb.address.fromHex(
                   signed.contract_address
                 );
-
                 window.gtag("event", "deployed", {
                   event_category: "Deploy on " + window.tronWeb.fullNode.host,
                   event_label: base58Adress
                 });
-
                 this.updateDeployStatus({
                   type: "success",
                   content: `Contract address: <a target='_blank' href='#/interact/${base58Adress}'>${base58Adress}</a>\n`

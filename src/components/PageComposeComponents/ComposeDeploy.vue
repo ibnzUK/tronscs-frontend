@@ -232,7 +232,7 @@ export default {
                   content: `Successful deployed contract '${
                     this.currentContractDeployName
                   }'. Cost: ${
-                    transactionInfo.receipt.energy_fee
+                transactionInfo.receipt.energy_fee != undefined
                       ? FormatNumber(
                           transactionInfo.receipt.energy_fee / 1000000
                         )
